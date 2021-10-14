@@ -5,7 +5,7 @@
  * Plugin Name:       Just Books
  * Plugin URI:        https://moza.dev/plugins/just-books/
  * Description:       books by Mohammad Zarei
- * Version:           0.1.0
+ * Version:           0.1.1
  * Author:            Mohammad Zarei
  * Author URI:        https://moza.dev/
  * License:           GPL-2.0+
