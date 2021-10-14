@@ -19,4 +19,4 @@ defined('ABSPATH') || exit;
 
 require __DIR__ . '/includes/Autoloader.php';
 
-JB\just_books::init();
+JB\JustBooks::init();

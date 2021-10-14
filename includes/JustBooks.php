@@ -2,10 +2,12 @@
 
 namespace JB;
 
+use JB\Install as Install;
+
 defined('ABSPATH') || exit;
 
 
-class just_books
+class JustBooks
 {
     /**
      * Just Book version.
@@ -33,7 +35,7 @@ class just_books
         if (self::$initialized)
             return;
         self::includes();
-        JB_install::install();
+        Install::install();
 
 
         self::$initialized = true;
@@ -41,7 +43,6 @@ class just_books
 
     private static function includes()
     {
-        require_once(JB_DIR . 'includes/class-jb-install.php');
     }
 
     public static function get_jb_version()

@@ -2,9 +2,11 @@
 
 namespace JB;
 
+use JB\JustBooks;
+
 defined('ABSPATH') || exit;
 
-class JB_install
+class Install
 {
 
 
@@ -16,7 +18,7 @@ class JB_install
     private static function setup_environment()
     {
         self::maybe_create_tables();
-        self::set_jb_version();
+        self::load_theme_textdomain();
     }
 
     /**
@@ -27,9 +29,7 @@ class JB_install
     public static function is_new_install()
     {
         $book_count = array_sum((array) wp_count_posts('book'));
-
-        // return is_null(just_books::get_jb_version() || 0 === $book_count);
-        return is_null(just_books::get_jb_version()) || (0 === $book_count);
+        return is_null(JustBooks::get_jb_version()) || (0 === $book_count);
     }
     /**
      * add new Option for JB versioning.
@@ -38,7 +38,7 @@ class JB_install
      */
     private static function set_jb_version()
     {
-        update_option('jb_books_version', just_books::$version);
+        update_option('jb_books_version', JustBooks::$version);
     }
 
     /**
@@ -53,7 +53,7 @@ class JB_install
         $wpdb->hide_errors();
 
         $collate = $wpdb->get_charset_collate();
-        $table_name = "$wpdb->prefix books_info";
+        $table_name = $wpdb->prefix . "books_info";
 
 
         $sql = "CREATE TABLE $table_name(
@@ -62,7 +62,6 @@ class JB_install
             isbn longtext NOT NULL,
             UNIQUE KEY ID (ID)
           ) $collate;";
-
         if (self::is_new_install() && !self::is_table_exist($table_name_with_prefix)) {
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
@@ -88,13 +87,18 @@ class JB_install
      */
     public static function install()
     {
-
         if (!is_blog_installed()) {
             return;
         }
-
         self::setup_environment();
-
+        self::set_jb_version();
         do_action('jb_installed');
+    }
+
+
+
+    private static function load_theme_textdomain()
+    {
+        load_theme_textdomain('just-books', JB_DIR . 'languages');
     }
 }

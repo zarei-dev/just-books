@@ -1,0 +1,16 @@
+{
+    "name": "zarei-dev/just-books",
+    "description": "nothing for now",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "zarei.dev",
+            "email": "mohammad.zarei1380@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"JB\\": "includes"}
+    }
+}
