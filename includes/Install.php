@@ -105,7 +105,7 @@ class Install
     private static function register_taxonomies()
     {
         add_action('init', array(__CLASS__, 'register_publisher_taxonomy'), 5);
-        add_action('init', array(__CLASS__, 'register_authors_taxonomy'), 5);
+        add_action('init', array(__CLASS__, 'register_author_taxonomy'), 5);
     }
 
 
@@ -148,7 +148,7 @@ class Install
             'description'           => __('book', 'just-books'),
             'labels'                => $labels,
             'supports'              => array('title', 'editor', 'thumbnail', 'comments', 'revisions', 'custom-fields', 'page-attributes'),
-            'taxonomies'            => array('book_publisher', 'book_authors'),
+            'taxonomies'            => array('book_publisher', 'book_author'),
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -205,9 +205,9 @@ class Install
         );
         register_taxonomy('book_publisher', array('book'), $args);
     }
-    public static function register_authors_taxonomy()
+    public static function register_author_taxonomy()
     {
-        if (!is_blog_installed() || taxonomy_exists('book_authors')) {
+        if (!is_blog_installed() || taxonomy_exists('book_author')) {
             return;
         }
         $labels = array(
@@ -241,7 +241,7 @@ class Install
             'show_in_nav_menus'          => true,
             'show_tagcloud'              => true,
         );
-        register_taxonomy('book_authors', array('book'), $args);
+        register_taxonomy('book_author', array('book'), $args);
     }
 
     private static function load_theme_textdomain()
