@@ -3,6 +3,7 @@
 namespace JB;
 
 use JB\JustBooks;
+use JB\admin\Install as AdminInstall;
 
 defined('ABSPATH') || exit;
 
@@ -64,7 +65,7 @@ class Install
             isbn longtext NOT NULL,
             UNIQUE KEY ID (ID)
           ) $collate;";
-        if (self::is_new_install() && !self::is_table_exist($table_name_with_prefix)) {
+        if (self::is_new_install() && self::is_table_exist($table_name)) {
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             dbDelta($sql);
         }
@@ -78,12 +79,12 @@ class Install
     private static function is_table_exist($table_name)
     {
         global $wpdb;
-        return is_null(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'"));
+        return is_null($wpdb->get_var("SHOW TABLES LIKE '$table_name'"));
     }
 
     /**
      * install JB plugin.
-     * 'jb_installed' hook.
+     * action: 'jb_installed'.
      *
      * @return void
      */
@@ -94,6 +95,10 @@ class Install
         }
         self::setup_environment();
         self::set_jb_version();
+        AdminInstall::init();
+
+
+
         do_action('jb_installed');
     }
 
@@ -147,7 +152,7 @@ class Install
             'label'                 => __('Book', 'just-books'),
             'description'           => __('book', 'just-books'),
             'labels'                => $labels,
-            'supports'              => array('title', 'editor', 'thumbnail', 'comments', 'revisions', 'custom-fields', 'page-attributes'),
+            'supports'              => array('title', 'editor', 'thumbnail', 'comments', 'revisions'),
             'taxonomies'            => array('book_publisher', 'book_author'),
             'hierarchical'          => false,
             'public'                => true,
@@ -244,7 +249,7 @@ class Install
         register_taxonomy('book_author', array('book'), $args);
     }
 
-    private static function load_theme_textdomain()
+    public static function load_theme_textdomain()
     {
         load_theme_textdomain('just-books', JB_DIR . 'languages');
     }
